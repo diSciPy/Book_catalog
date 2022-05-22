@@ -37,7 +37,7 @@ def create_app(config_type):  # dev,test or prod
 
     # set up Babel
     babel = Babel(app)
-    app.config['BABEL_TRANSLATION_DIRECTORIES'] = os.getenv('BABEL_TRANSLATION_DIRECTORIES')
+    app.config['BABEL_TRANSLATION_DIRECTORIES'] = os.getenv('BABEL_TRANSLATION_DIRECTORIES', './locale')
 
     @babel.localeselector
     def get_locale():
