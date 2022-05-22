@@ -7,6 +7,7 @@ from flask_bcrypt import Bcrypt
 from config import dev
 from flask_babel import Babel, _
 from flask_wtf.csrf import CSRFProtect
+import psycopg2
 
 db = SQLAlchemy()
 bootstrap = Bootstrap()
@@ -22,7 +23,7 @@ def create_app(config_type):  # dev,test or prod
 
     app.config.from_pyfile(configuration)
     db.init_app(app)  # bind database to flask
-    conn = psycopg2.connect(SQLALCHEMY_DATABASE_URI, sslmode='require')
+    conn = psycopg2.connect(DATABASE_URI, sslmode='require')
     bootstrap.init_app(app)  # initialize bootstrap
     login_manager.init_app(app)  # initialize log.manage
     bcrypt.init_app(app)  # initialize bcrypt
