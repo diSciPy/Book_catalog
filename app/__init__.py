@@ -9,6 +9,7 @@ from flask_babel import Babel, _
 from flask_wtf.csrf import CSRFProtect
 import psycopg2
 
+SECRET_KEY = os.urandom(32)
 db = SQLAlchemy()
 bootstrap = Bootstrap()
 login_manager = LoginManager()

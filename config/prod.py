@@ -2,7 +2,6 @@ import os
 import re
 
 DEBUG = os.getenv( 'DEBUG', False )
-SECRET_KEY = os.urandom(32)
 
 #to comply with heroku connection to postgre SQL DB
 uri = os.getenv('DATABASE_URL')
