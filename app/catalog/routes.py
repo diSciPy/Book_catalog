@@ -24,7 +24,7 @@ def pull_lang_code(endpoint, values):
 
 @main.route('/')
 @main.route('/<int:page>')
-def display_books(page=1):
+def display_books(page=1, lang_code='en'):
     try:
         #Set the pagination configuration
         search = False
