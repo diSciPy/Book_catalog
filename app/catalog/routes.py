@@ -38,7 +38,7 @@ def display_books(page=1, lang_code='en'):
         user = current_user.is_authenticated
         return render_template('home.html', books=books, publisher=publisher, user=user, lang_code=g.lang_code)
     except KeyError:
-        return redirect('/en/')
+        return redirect('/en')
 
 
 @main.route('/display/publisher/<int:publisher_id>')
