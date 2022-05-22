@@ -1,0 +1,9 @@
+{%extends 'layout.html'%}
+{%block title%} {{_('SignIn')}} {%endblock%}
+{%block content%}
+    <div class="container login-msg">
+        <h4 class=>{{_('Login Here')}}</h4>
+        <hr><br>
+        <div>{{wtf.quick_form(form)}}</div>
+    </div>
+{%endblock content%}

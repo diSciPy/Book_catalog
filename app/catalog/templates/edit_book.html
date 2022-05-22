@@ -1,0 +1,10 @@
+{%extends 'layout.html'%}
+
+{%block content%}
+    <div class="container">
+        <h4>{{_('Update book')}} "{{title}}"</h4>
+        {{wtf.quick_form(form)}}
+        {{form.csrf_token}}
+    </div>
+
+{%endblock content%}

@@ -1,0 +1,23 @@
+html,body {height: 100%; z-index:1;}
+h1,h2,h3,h4{font-family:Lobster,serif}
+p,ol, li,{font-family: 'Akaya Telivigala', cursive;font-size:small}
+ul{position: relative; top:0px; right:7%;}
+.footer{position: sticky; width: 100%; left:0;bottom:0; height: 40px;}
+h3{position:relative; left: 10%}
+.navbar {position: fixed; top: 0; z-index:2; width: 100%}
+.books{padding-top: 120px; left:5%; width: 80%; position: unset;}
+.container alert alert-info{padding-top: 120px;}
+.container-fluid{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: row;
+    align-content: stretch;
+}
+.container{padding-top: 120px;}
+.container.publisher {padding-top: 120px;}
+.publisher {font-family: 'Akaya Telivigala', cursive;padding: 25px; left: 40px}
+.ftr {width: 100%; padding: 25px, background: black}
+.wrapper{ min-height: 10%;}
+.title {color: #d6d4d0}

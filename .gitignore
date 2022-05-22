@@ -1,0 +1,11 @@
+# created by virtualenv automatically
+.idea/*
+*.pyc
+*/__pycache__/
+##project conf parameters
+.env
+##env generated unnecessary files
+Lib/
+Scripts/
+include/
+pyvenv.cfg

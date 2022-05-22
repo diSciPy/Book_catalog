@@ -1,0 +1,9 @@
+{%extends 'layout.html'%}
+{%block content%}
+
+    <br>
+    <div class="container">
+        <h4>{{_("Sorry, the page you're looking for could not be found ...")}}</h4> <br>
+        <button type="submit" class="btn btn-sm btn-dark"><a href="{{url_for('main.display_books')}}" style="color:floralwhite">{{_('Back home')}}</a></button>
+    </div>
+{%endblock content%}

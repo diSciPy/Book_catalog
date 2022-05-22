@@ -1,0 +1,70 @@
+{%extends 'layout.html'%}
+{%block content%}
+
+    <div class="container books">
+    <div class="row">
+
+        {%for book in books.items%}
+        <div class="col-md-4">
+            <img src="static/img/{{book.image[lang_code]}}" alt="{{book.image[lang_code]}}" height="250" width="190" class="img-rounded">
+            <h4>{{_('Title')}}: {{book.title[lang_code]}}</h4>
+            <p>{{_('Authors')}}: {{book.author[lang_code]}}</p>
+            <p>{{_('Format')}}: {{book.format[lang_code]}}</p>
+            <p>{{_('Rating')}}: {{book.avr_rating}}</p>
+            <p>{{_('Pages')}}: {{book.num_pages}}</p>
+            <p><a href="{{url_for('main.display_publisher', publisher_id=book.pub_id)}}">
+            {%for pub in publisher%}
+                {%if pub.id == book.pub_id%}
+                {{_('Publisher')}}: {{pub.name[lang_code]}}</a></p>
+                {%endif%}
+            {%endfor%}
+            {%if user%}
+                <button type="submit" class="btn btn-sm btn-dark"><a href="{{url_for('main.create_book', pub_id=book.pub_id)}}" style="color:floralwhite">{{_('Create')}}</button>
+                <button type="submit" class="btn btn-sm btn-dark"><a href="{{url_for('main.edit_book', book_id=book.id)}}" style="color:floralwhite">{{_('Edit')}}</a></button>
+                <button type="submit" class="btn btn-sm btn-dark"><a href="{{url_for('main.delete_book', book_id=book.id)}}" style="color:floralwhite">{{_('Delete')}}</a></button>
+                <br>
+                <br>
+            {%endif%}
+        </div>
+        {%endfor%}
+    </div>
+    </div>
+
+<!-- Pagination Links-->
+<div class="text-right" style="float:right; top:2px;">
+    <a href="{{ url_for('main.display_books', page=books.prev_num) }}"
+       class="btn btn-outline-dark
+       {% if books.page == 1 %}disabled{% endif %}">
+        &laquo;
+    </a>
+<!-- Loop through the number of pages to display a link for each-->
+    {% for page_num in books.iter_pages(left_edge=1, right_edge=1, left_current=1, right_current=2) %}
+{% if page_num %}
+<!-- Check for the active page and set the link to "Active"-->
+            {% if books.page == page_num %}
+            <a href="{{ url_for('main.display_books', page=page_num) }}"
+               class="btn btn-dark">
+                {{ page_num }}
+            </a>
+            {% else %}
+            <a href="{{ url_for('main.display_books', page=page_num) }}"
+               class="btn btn-outline-dark">
+                {{ page_num }}
+            </a>
+            {% endif %}
+        {% else %}
+            ...
+        {% endif %}
+    {% endfor %}
+    <a href="{{ url_for('main.display_books', page=books.next_num) }}"
+       class="btn btn-outline-dark
+       {% if books.page == books.pages %}disabled{% endif %}">
+        &raquo;
+    </a>
+    <p class="text-right mt-3">
+        {{_('Showing page')}} {{ books.page }} {{_('of')}} {{ books.pages }}
+    </p>
+
+</div>
+
+{%endblock content%}

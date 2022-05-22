@@ -1,0 +1,12 @@
+{%extends 'layout.html'%}
+{%block content%}
+    <div class="container">
+        <h4>{{_('Creation of a new book')}}</h4>
+        <h4>{{_('Publisher')}} {{publisher.name[lang_code]}}</h4>
+        <hr>
+
+        {{form.hidden_tag()}}
+        {{wtf.quick_form(form)}}
+
+    </div>
+{%endblock content%}
