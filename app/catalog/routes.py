@@ -22,7 +22,7 @@ def pull_lang_code(endpoint, values):
     g.lang_code = values.pop('lang_code')
 
 
-@main.route('/en')
+@main.route('/')
 @main.route('/<int:page>')
 def display_books(page=1):
     try:

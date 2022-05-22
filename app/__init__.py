@@ -28,6 +28,7 @@ def create_app(config_type):  # dev,test or prod
     login_manager.init_app(app)  # initialize log.manage
     bcrypt.init_app(app)  # initialize bcrypt
     csrf = CSRFProtect(app) #initialize CSRF protection
+    app.config['SECRET_KEY'] = SECRET_KEY
 
     from app.catalog import main  # import blueprint
     app.register_blueprint(main)  # register blueprint
