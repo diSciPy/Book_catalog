@@ -8,6 +8,6 @@ with flask_app.app_context():
         User.create_user(user='harry',
                          email='harry@potter.com',
                          password='secret')
-        flask_app.run()
+    flask_app.run()
 
 ##gunicorn - http server web will be run

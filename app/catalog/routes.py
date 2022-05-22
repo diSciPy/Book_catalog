@@ -22,9 +22,9 @@ def pull_lang_code(endpoint, values):
     g.lang_code = values.pop('lang_code')
 
 
-@main.route('/')
+@main.route('/en')
 @main.route('/<int:page>')
-def display_books(page=1, lang_code='en'):
+def display_books(page=1):
     try:
         #Set the pagination configuration
         search = False
