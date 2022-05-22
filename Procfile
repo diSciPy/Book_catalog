@@ -1,1 +1,1 @@
-web: gunicorn run:flask_app
+web: uwsgi uwsgi.ini
