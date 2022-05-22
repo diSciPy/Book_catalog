@@ -22,6 +22,13 @@ def pull_lang_code(endpoint, values):
     g.lang_code = values.pop('lang_code')
 
 
+@main.before_request
+def fix_missing_csrf_token():
+    if app.config['WTF_CSRF_FIELD_NAME'] not in session:
+        if app.config['WTF_CSRF_FIELD_NAME'] in g:
+            g.pop(app.config['WTF_CSRF_FIELD_NAME'])
+
+
 @main.route('/')
 @main.route('/<int:page>')
 def display_books(page=1):
