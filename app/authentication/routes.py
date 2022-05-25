@@ -1,6 +1,6 @@
-from flask import render_template, request, flash, redirect, url_for, g, session
+from flask import render_template, request, flash, redirect, url_for, g, session, send_from_directory
 from flask_login import login_user, logout_user, login_required, current_user
-from app import db, flask_app
+from app import db
 from app.authentication import authentication as at
 from app.authentication.forms import RegistrationForm, LoginForm
 from app.authentication.models import User, UserVerification, load_user
@@ -31,8 +31,7 @@ def fix_missing_csrf_token():
 
 @at.route('/favicon.ico')
 def favicon():
-    return send_from_directory(os.path.join(flask_app.root_path, 'static'),
-                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
+    return send_from_directory('static')
 
 
 @at.route('/register', methods=['GET', 'POST'])

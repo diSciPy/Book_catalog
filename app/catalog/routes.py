@@ -1,5 +1,5 @@
 from app.catalog import main
-from app import db, flask_app
+from app import db
 from app.catalog.models import Book, Publication
 from flask import render_template, flash, request, redirect, url_for, g, send_from_directory
 from flask_login import login_required, current_user
@@ -31,8 +31,7 @@ def fix_missing_csrf_token():
 
 @main.route('/favicon.ico')
 def favicon():
-    return send_from_directory(os.path.join(flask_app.root_path, 'static'),
-                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
+    return send_from_directory('static')
 
 
 @main.route('/')
