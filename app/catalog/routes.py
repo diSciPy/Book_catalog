@@ -1,5 +1,5 @@
 from app.catalog import main
-from app import db
+from app import db, app
 from app.catalog.models import Book, Publication
 from flask import render_template, flash, request, redirect, url_for, g, send_from_directory
 from flask_login import login_required, current_user
