@@ -1,6 +1,6 @@
 from flask import render_template, request, flash, redirect, url_for, g, session
 from flask_login import login_user, logout_user, login_required, current_user
-from app import db
+from app import db, flask_app
 from app.authentication import authentication as at
 from app.authentication.forms import RegistrationForm, LoginForm
 from app.authentication.models import User, UserVerification, load_user

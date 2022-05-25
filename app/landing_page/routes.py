@@ -1,5 +1,5 @@
 from flask import render_template, request, flash, redirect, url_for, g, session
-from app import db
+from app import db, flassk_app
 from app.landing_page import landing_page as lp
 from app.catalog import main
 import os
