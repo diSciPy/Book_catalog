@@ -37,6 +37,9 @@ def create_app(config_type):  # dev,test or prod
     from app.authentication import authentication
     app.register_blueprint(authentication)
 
+    from app.landing_page import landing_page
+    app.register_blueprint(landing_page)
+
     # set up Babel
     babel = Babel(app)
     app.config['BABEL_TRANSLATION_DIRECTORIES'] = os.getenv('BABEL_TRANSLATION_DIRECTORIES', './locale')

@@ -29,6 +29,12 @@ def fix_missing_csrf_token():
             g.pop(app.config['WTF_CSRF_FIELD_NAME'])
 
 
+@main.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
+
 @main.route('/')
 @main.route('/<int:page>')
 def display_books(page=1):
