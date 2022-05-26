@@ -57,4 +57,4 @@ def create_app(config_type):  # dev,test or prod
 
 
 def get_project_root() -> Path:
-    return Path(__file__).parent.parent
+    return Path(__file__).parent

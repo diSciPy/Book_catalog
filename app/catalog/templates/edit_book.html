@@ -3,7 +3,7 @@
 {%block content%}
     <div class="container">
         <h4>{{_('Update book')}} "{{title}}"</h4>
-        {{wtf.quick_form(form)}}
+        {{wtf.quick_form(form, method="post", enctype="multipart/form-data")}}
         {{form.csrf_token}}
     </div>
 

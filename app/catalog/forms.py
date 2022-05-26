@@ -1,5 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, FloatField, IntegerField, SelectField
+from flask_wtf.file import FileField, FileRequired, FileAllowed
+from werkzeug.utils import secure_filename
 from wtforms.validators import DataRequired
 from flask_babel import Babel, _, lazy_gettext
 from app.catalog.models import Publication
@@ -16,6 +18,12 @@ class EditBookForm(FlaskForm):
     author_en = StringField(lazy_gettext('Author (english)'))
     author_ua = StringField(lazy_gettext('Author (ukrainian)'))
     num_pages = IntegerField(lazy_gettext('Pages'))
+    cover_en = FileField(lazy_gettext('Book cover (english)'), validators=[
+        FileAllowed(['jpg', 'png', 'jpeg'], lazy_gettext('Images only!'))
+    ])
+    cover_ua = FileField(lazy_gettext('Book cover (ukrainian)'), validators=[
+        FileAllowed(['jpg', 'png', 'jpeg'], lazy_gettext('Images only!'))
+    ])
     submit = SubmitField(lazy_gettext('Update'))
 
 
