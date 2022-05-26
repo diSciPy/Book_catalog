@@ -8,8 +8,11 @@ from app.catalog.models import Publication
 class EditBookForm(FlaskForm):
     title_en = StringField(lazy_gettext('Title (english)'))
     title_ua = StringField(lazy_gettext('Title (ukrainian)'))
-    format_en = SelectField(lazy_gettext('Format (english)'), choices=[('hardcover', 'hardcover'), ('paperback', 'paperback')])
-    format_ua = SelectField(lazy_gettext('Format (ukrainian)'), choices=[('палітурка', 'палітурка'), ('м`яка обкладинка', 'м`яка обкладинка')])
+    format_en = SelectField(lazy_gettext('Format (english)'),
+                            choices=[('hardcover', 'hardcover'), ('paperback', 'paperback'), ('eBook', 'eBook')])
+    format_ua = SelectField(lazy_gettext('Format (ukrainian)'),
+                            choices=[('палітурка', 'палітурка'), ('м`яка обкладинка', 'м`яка обкладинка'), ('електронна книга', 'електронна книга')])
+
     author_en = StringField(lazy_gettext('Author (english)'))
     author_ua = StringField(lazy_gettext('Author (ukrainian)'))
     num_pages = IntegerField(lazy_gettext('Pages'))
@@ -22,8 +25,12 @@ class CreateBookForm(FlaskForm):
     author_en = StringField(lazy_gettext('Author (english)'), validators=[DataRequired()])
     author_ua = StringField(lazy_gettext('Author (ukrainian)'), validators=[DataRequired()])
     avr_rating = FloatField(lazy_gettext('Rating'), validators=[DataRequired()])
-    format_en = SelectField(lazy_gettext('Format (english)'), choices=['hardcover', 'paperback'], validators=[DataRequired()])
-    format_ua = SelectField(lazy_gettext('Format (ukrainian)'), choices=['палітурка', 'м`яка обкладинка'], validators=[DataRequired()])
+    format_en = SelectField(lazy_gettext('Format (english)'),
+                            choices=['hardcover', 'paperback', 'eBook'],
+                            validators=[DataRequired()])
+    format_ua = SelectField(lazy_gettext('Format (ukrainian)'),
+                            choices=['палітурка', 'м`яка обкладинка', 'електронна книга'],
+                            validators=[DataRequired()])
     img_url_en = StringField(lazy_gettext('Image (english)'), validators=[DataRequired()])
     img_url_ua = StringField(lazy_gettext('Image (ukrainian)'), validators=[DataRequired()])
     num_pages = IntegerField(lazy_gettext('Pages'), validators=[DataRequired()])

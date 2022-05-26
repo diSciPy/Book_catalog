@@ -8,6 +8,7 @@ from config import dev
 from flask_babel import Babel, _
 from flask_wtf.csrf import CSRFProtect
 import psycopg2
+from pathlib import Path
 
 SECRET_KEY = os.urandom(32)
 db = SQLAlchemy()
@@ -19,9 +20,7 @@ bcrypt = Bcrypt()
 
 
 def create_app(config_type):  # dev,test or prod
-    app = Flask(__name__,
-                static_url_path='',
-                static_folder='app/static')
+    app = Flask(__name__)
     configuration = os.path.join(os.getcwd(), 'config', config_type + '.py')
 
     app.config.from_pyfile(configuration)
@@ -31,7 +30,9 @@ def create_app(config_type):  # dev,test or prod
     login_manager.init_app(app)  # initialize log.manage
     bcrypt.init_app(app)  # initialize bcrypt
     csrf = CSRFProtect(app) #initialize CSRF protection
+    csrf.init_app(app)
     app.config['SECRET_KEY'] = SECRET_KEY
+
 
     from app.catalog import main  # import blueprint
     app.register_blueprint(main)  # register blueprint
@@ -53,3 +54,7 @@ def create_app(config_type):  # dev,test or prod
         return g.lang_code
 
     return app
+
+
+def get_project_root() -> Path:
+    return Path(__file__).parent.parent

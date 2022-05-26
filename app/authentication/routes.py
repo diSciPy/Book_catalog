@@ -22,16 +22,11 @@ def pull_lang_code(endpoint, values):
     g.lang_code = values.pop('lang_code')
 
 
-@at.before_request
-def fix_missing_csrf_token():
-    if app.config['WTF_CSRF_FIELD_NAME'] not in session:
-        if app.config['WTF_CSRF_FIELD_NAME'] in g:
-            g.pop(app.config['WTF_CSRF_FIELD_NAME'])
-
-
-@at.route('/favicon.ico')
-def favicon():
-    return send_from_directory('static')
+# @at.before_request
+# def fix_missing_csrf_token():
+#     if session['csrf_token'] not in session:
+#         if session['csrf_token'] in g:
+#             g.pop(session['csrf_token'])
 
 
 @at.route('/register', methods=['GET', 'POST'])

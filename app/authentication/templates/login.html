@@ -3,6 +3,7 @@
 {%block content%}
     <div class="container login-msg">
         <h4 class=>{{_('Login Here')}}</h4>
+        {{ form.csrf_token }}
         <hr><br>
         <div>{{wtf.quick_form(form)}}</div>
     </div>
