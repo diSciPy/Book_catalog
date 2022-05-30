@@ -1,5 +1,6 @@
 import os
-from flask import Flask, g, request, redirect
+from flask import Flask, g, request, redirect, session
+from flask_sso import SSO
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 from flask_login import LoginManager

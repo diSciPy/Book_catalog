@@ -2,7 +2,7 @@ import os
 import re
 
 DEBUG = os.getenv( 'DEBUG', False )
-
+SECRET_KEY = os.getenv('SECRET_KEY')
 #to comply with heroku connection to postgre SQL DB
 SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL')
 if SQLALCHEMY_DATABASE_URI.startswith("postgres://"):
