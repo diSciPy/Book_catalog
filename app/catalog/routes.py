@@ -79,23 +79,21 @@ def edit_book(book_id):
     form = EditBookForm(obj=book, data={'title_en': book.title['en'], 'title_ua': book.title['uk_UA'],
                                         'format_en': book.format['en'], 'format_ua': book.format['uk_UA'],
                                         'author_en': book.author['en'], 'author_ua': book.author['uk_UA']})
-    #populate imgs with default values from db
-    for img in form.cover_en, form.cover_ua:
-        if img.name[-2:] == 'ua':
-            path = book.image['uk_UA']
-        else:
-            path = book.image[img.name[-2:]]
-        try:
-            img = Image.open(os.path.join(get_project_root(), 'static', 'img', path))
-            print(img.info)
-        except (FileNotFoundError, UnidentifiedImageError):
-            img = Image.open(os.path.join(get_project_root(), 'static', 'img', 'broken_img.png'))
-        img.close()
+    # #populate imgs with default values from db
+    # for img in form.cover_en, form.cover_ua:
+    #     if img.name[-2:] == 'ua':
+    #         path = book.image['uk_UA']
+    #     else:
+    #         path = book.image[img.name[-2:]]
+    #     try:
+    #         img = Image.open(os.path.join(get_project_root(), 'static', 'img', path))
+    #     except (FileNotFoundError, UnidentifiedImageError):
+    #         img = Image.open(os.path.join(get_project_root(), 'static', 'img', 'broken_img.png'))
+    #     img.close()
     if request.method == 'POST' and form.validate_on_submit():
         form.process(formdata=request.form)
 
         #upload book cover
-        upload_image(request.files['cover_en'], request.files['cover_ua'], form.title_en.data)
 
         book.title['en'] = form.title_en.data
         book.title['uk_UA'] = form.title_ua.data
@@ -104,33 +102,26 @@ def edit_book(book_id):
         book.author['en'] = form.author_en.data
         book.author['uk_UA'] = form.author_ua.data
         book.num_pages = form.num_pages.data
-        book.image['en'] = request.files['cover_en'].filename
-        print(book.image['en'])
-        book.image['uk_UA'] = request.files['cover_ua'].filename
-        print(book.image['uk_UA'])
+        for img in form.cover_en, form.cover_ua:
+            if request.files[img.name]:
+                cover = upload_image(request.files[img.name], form.title_en.data, img.name[-2:])
+                if img.name[-2:] == 'en':
+                    book.image[img.name[-2:]] = cover.filename
+                    flag_modified(book, f"image")
+                else:
+                    book.image['uk_UA'] = cover.filename
+                    flag_modified(book, f"image")
 
         #update DB fields
         for fieldname, value in form.data.items():
-            if fieldname in ('submit', 'csrf_token'):
+            if fieldname in ('submit', 'csrf_token') or fieldname[:-3] == 'cover':
                 continue
             elif len(str(value)) > 0 and fieldname == 'num_pages':
                 flag_modified(book, f"{fieldname}")
-            elif len(str(value)) > 0 and fieldname[:-3] == 'cover':
-                flag_modified(book, f"image")
             elif len(str(value)) > 0:
                 flag_modified(book, f"{fieldname[:-3]}")
             else:
                 break
-
-        # #update image DB fields
-        # for filename in img_en_filename, img_ua_filename:
-        #     if filename[:2] == 'en' and not filename == '':
-        #         flag_modified(book, f"image")
-        #     elif filename[:2] == 'ua' and not filename == '':
-        #         book.image['uk_UA'] = filename
-        #         flag_modified(book, f"image")
-        #     else:
-        #         break
 
         db.session.commit()
         flash(_('Book {} by {} has been edited successfully').format(book.title[g.lang_code], book.author[g.lang_code]))

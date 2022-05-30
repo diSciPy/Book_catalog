@@ -53,10 +53,7 @@ class CreateBookForm(FlaskForm):
 
 
 # args - form.data fields
-def upload_image(cover_en, cover_ua, book_title_en):
-    img_en, img_ua = cover_en, cover_ua
-    img_en.filename = secure_filename('en_' + '_'.join(book_title_en.split())+'.jpg')
-    img_ua.filename = img_en.filename.replace('en_', 'ua_')
-    for f in img_en, img_ua:
-        f.save(os.path.join(get_project_root(), 'static', 'img', f.filename))
-    return img_en.filename, img_ua.filename
+def upload_image(cover, book_title_en, locale):
+    cover.filename = secure_filename(locale +'_' + '_'.join(book_title_en.split())+'.jpg')
+    cover.save(os.path.join(get_project_root(), 'static', 'img', cover.filename))
+    return cover
