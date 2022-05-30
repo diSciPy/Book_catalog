@@ -3,6 +3,7 @@ from app import db, bcrypt
 from flask_login import UserMixin
 from app import login_manager
 import secrets
+import requests
 
 
 class User(UserMixin, db.Model):
@@ -19,10 +20,11 @@ class User(UserMixin, db.Model):
 
     # clasmethods belong to a class but are not associated with any class instance
     @classmethod
-    def create_user(cls, user, email, password):
+    def create_user(cls, user, email, password, verified=False):
         user = cls(user_name=user,
                    user_email=email,
-                   user_password=bcrypt.generate_password_hash(password).decode('utf-8'))
+                   user_password=bcrypt.generate_password_hash(password).decode('utf-8'),
+                   verified=verified)
 
         db.session.add(user)
         db.session.commit()

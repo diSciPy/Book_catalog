@@ -1,10 +1,20 @@
 {%extends 'layout.html'%}
+<link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Open+Sans" />
 {%block title%} {{_('SignIn')}} {%endblock%}
 {%block content%}
     <div class="container login-msg">
         <h4 class=>{{_('Login Here')}}</h4>
         {{ form.csrf_token }}
+
         <hr><br>
         <div>{{wtf.quick_form(form)}}</div>
+        <div class="google-btn" style = "position:relative; top:10px;" >
+            <div class="google-icon-wrapper">
+                <img class="google-icon" src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"/>
+            </div>
+            <a class="btn-text" href="{{url_for('authentication.google_login')}}">
+                <b>{{_('Sign in with google')}}</b>
+            </a>
+        </div>
     </div>
 {%endblock content%}

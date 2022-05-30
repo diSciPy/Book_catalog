@@ -3,6 +3,9 @@ import os
 DEBUG = os.getenv('DEBUG', True)
 SECRET_KEY = os.getenv('SECRET_KEY')
 #SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI')
+#disable SSL for SSO
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+
 SQLALCHEMY_DATABASE_URI = "postgresql://postgres:SU39vobwhhLAIFpUdJ01@127.0.0.1/catalog_db"
 SQLALCHEMY_TRACK_MODIFICATIONS = os.getenv('SQLALCHEMY_TRACK_MODIFICATIONS', True)
 SENDGRID_API_KEY = os.getenv('SENDGRID_API_KEY')

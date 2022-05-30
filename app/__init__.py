@@ -1,6 +1,5 @@
 import os
 from flask import Flask, g, request, redirect, session
-from flask_sso import SSO
 from flask_sqlalchemy import SQLAlchemy
 from flask_bootstrap import Bootstrap
 from flask_login import LoginManager
@@ -10,6 +9,8 @@ from flask_babel import Babel, _
 from flask_wtf.csrf import CSRFProtect
 import psycopg2
 from pathlib import Path
+from oauthlib.oauth2 import WebApplicationClient
+import requests
 
 SECRET_KEY = os.urandom(32)
 db = SQLAlchemy()
@@ -25,6 +26,7 @@ def create_app(config_type):  # dev,test or prod
     configuration = os.path.join(os.getcwd(), 'config', config_type + '.py')
 
     app.config.from_pyfile(configuration)
+
     db.init_app(app)  # bind database to flask
     #conn = psycopg2.connect(DATABASE_URI, sslmode='require')
     bootstrap.init_app(app)  # initialize bootstrap
@@ -33,7 +35,6 @@ def create_app(config_type):  # dev,test or prod
     csrf = CSRFProtect(app) #initialize CSRF protection
     csrf.init_app(app)
     app.config['SECRET_KEY'] = SECRET_KEY
-
 
     from app.catalog import main  # import blueprint
     app.register_blueprint(main)  # register blueprint
@@ -59,3 +60,4 @@ def create_app(config_type):  # dev,test or prod
 
 def get_project_root() -> Path:
     return Path(__file__).parent
+
