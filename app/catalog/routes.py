@@ -1,16 +1,16 @@
 import random
-
 from app.catalog import main
 from app import db, get_project_root
 from app.catalog.models import Book, Publication
 from flask import render_template, flash, request, redirect, url_for, g, send_from_directory
 from flask_login import login_required, current_user
-from app.catalog.forms import EditBookForm, CreateBookForm
+from app.catalog.forms import EditBookForm, CreateBookForm, upload_image
 from flask_paginate import Pagination, get_page_parameter
 from flask_babel import Babel, _
 from sqlalchemy.sql.expression import func
 from sqlalchemy.orm.attributes import flag_modified
 from werkzeug.utils import secure_filename
+from PIL import Image, UnidentifiedImageError
 import os
 
 
@@ -78,21 +78,25 @@ def edit_book(book_id):
     book = Book.query.filter_by(id=book_id).first()
     form = EditBookForm(obj=book, data={'title_en': book.title['en'], 'title_ua': book.title['uk_UA'],
                                         'format_en': book.format['en'], 'format_ua': book.format['uk_UA'],
-                                        'author_en': book.author['en'], 'author_ua': book.author['uk_UA'],
-                                        'cover_en': book.image['en'], 'cover_ua': book.image['uk_UA']})
+                                        'author_en': book.author['en'], 'author_ua': book.author['uk_UA']})
+    #populate imgs with default values from db
+    for img in form.cover_en, form.cover_ua:
+        if img.name[-2:] == 'ua':
+            path = book.image['uk_UA']
+        else:
+            path = book.image[img.name[-2:]]
+        try:
+            img = Image.open(os.path.join(get_project_root(), 'static', 'img', path))
+            print(img.info)
+        except (FileNotFoundError, UnidentifiedImageError):
+            img = Image.open(os.path.join(get_project_root(), 'static', 'img', 'broken_img.png'))
+        img.close()
     if request.method == 'POST' and form.validate_on_submit():
         form.process(formdata=request.form)
 
         #upload book cover
-        img_en, img_ua = request.files['cover_en'], request.files['cover_ua']
-        print(img_en.filename, img_ua.filename)
-        img_en.filename = secure_filename('en_'+form.title_en.data[:random.randrange(0, len(form.title_en.data)):
-                                                                   random.randint(1, 4)]+'.jpeg')
-        img_ua.filename = img_en.filename.replace('en_', 'ua_')
-        print(img_en.filename, img_ua.filename)
-        for f in img_en, img_ua:
-            f.save(os.path.join(get_project_root(), 'static', 'img', f.filename))
-            print(os.path.join(get_project_root(), 'static', 'img', f.filename))
+        upload_image(request.files['cover_en'], request.files['cover_ua'], form.title_en.data)
+
         book.title['en'] = form.title_en.data
         book.title['uk_UA'] = form.title_ua.data
         book.format['en'] = form.format_en.data
@@ -100,8 +104,12 @@ def edit_book(book_id):
         book.author['en'] = form.author_en.data
         book.author['uk_UA'] = form.author_ua.data
         book.num_pages = form.num_pages.data
-        book.image['en'] = img_en.filename
-        book.image['uk_UA'] = img_ua.filename
+        book.image['en'] = request.files['cover_en'].filename
+        print(book.image['en'])
+        book.image['uk_UA'] = request.files['cover_ua'].filename
+        print(book.image['uk_UA'])
+
+        #update DB fields
         for fieldname, value in form.data.items():
             if fieldname in ('submit', 'csrf_token'):
                 continue
@@ -112,7 +120,18 @@ def edit_book(book_id):
             elif len(str(value)) > 0:
                 flag_modified(book, f"{fieldname[:-3]}")
             else:
-                continue
+                break
+
+        # #update image DB fields
+        # for filename in img_en_filename, img_ua_filename:
+        #     if filename[:2] == 'en' and not filename == '':
+        #         flag_modified(book, f"image")
+        #     elif filename[:2] == 'ua' and not filename == '':
+        #         book.image['uk_UA'] = filename
+        #         flag_modified(book, f"image")
+        #     else:
+        #         break
+
         db.session.commit()
         flash(_('Book {} by {} has been edited successfully').format(book.title[g.lang_code], book.author[g.lang_code]))
         return redirect(url_for('main.display_books'))
@@ -122,16 +141,19 @@ def edit_book(book_id):
 @main.route('/create/book/<int:pub_id>', methods=['GET', 'POST'])
 @login_required
 def create_book(pub_id):
-    form = CreateBookForm(lang_code=g.lang_code)
     publisher_book = Publication.query.get(pub_id)
+    form = CreateBookForm(lang_code=g.lang_code, data={'publisher': publisher_book})
     form.publisher.choices = [(pub.id, pub.name[g.lang_code]) for pub in Publication.query.order_by('id').all()]
     #form.publisher.data = pub_id  # prepopulates pub_name
     if form.validate_on_submit():
+        img_en_filename, img_ua_filename = upload_image(request.files['cover_en'],
+                                                        request.files['cover_ua'],
+                                                        form.title_en.data)
         book = Book(title=dict({"en": form.title_en.data, "uk_UA": form.title_ua.data}),
                     author=dict({"en": form.author_en.data, "uk_UA": form.author_ua.data}),
                     avr_rating=form.avr_rating.data,
                     book_format=dict({"en": form.format_en.data, "uk_UA": form.format_ua.data}),
-                    image=dict({"en": form.img_url_en.data, "uk_UA": form.img_url_ua.data}),
+                    image=dict({"en": img_en_filename, "uk_UA": img_ua_filename}),
                     num_pages=form.num_pages.data, pub_id=int(form.publisher.data))
         db.session.add(book)
         db.session.commit()

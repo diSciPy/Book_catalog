@@ -1,3 +1,4 @@
+from app import get_project_root
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, FloatField, IntegerField, SelectField
 from flask_wtf.file import FileField, FileRequired, FileAllowed
@@ -5,6 +6,7 @@ from werkzeug.utils import secure_filename
 from wtforms.validators import DataRequired
 from flask_babel import Babel, _, lazy_gettext
 from app.catalog.models import Publication
+import os
 
 
 class EditBookForm(FlaskForm):
@@ -39,8 +41,22 @@ class CreateBookForm(FlaskForm):
     format_ua = SelectField(lazy_gettext('Format (ukrainian)'),
                             choices=['палітурка', 'м`яка обкладинка', 'електронна книга'],
                             validators=[DataRequired()])
-    img_url_en = StringField(lazy_gettext('Image (english)'), validators=[DataRequired()])
-    img_url_ua = StringField(lazy_gettext('Image (ukrainian)'), validators=[DataRequired()])
+    cover_en = FileField(lazy_gettext('Book cover (english)'), validators=[
+        FileAllowed(['jpg', 'png', 'jpeg'], lazy_gettext('Images only!')), DataRequired()
+    ])
+    cover_ua = FileField(lazy_gettext('Book cover (ukrainian)'), validators=[
+        FileAllowed(['jpg', 'png', 'jpeg'], lazy_gettext('Images only!')), DataRequired()
+    ])
     num_pages = IntegerField(lazy_gettext('Pages'), validators=[DataRequired()])
     publisher = SelectField(lazy_gettext('Publisher'), validate_choice=True, coerce=int)
     submit = SubmitField(lazy_gettext('Create'))
+
+
+# args - form.data fields
+def upload_image(cover_en, cover_ua, book_title_en):
+    img_en, img_ua = cover_en, cover_ua
+    img_en.filename = secure_filename('en_' + '_'.join(book_title_en.split())+'.jpg')
+    img_ua.filename = img_en.filename.replace('en_', 'ua_')
+    for f in img_en, img_ua:
+        f.save(os.path.join(get_project_root(), 'static', 'img', f.filename))
+    return img_en.filename, img_ua.filename
