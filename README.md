@@ -196,7 +196,7 @@ $ pybabel compile -d .\app\locale
 
 
 
-![Logo](file://app/static/favicon.ico)
+![Logo](./app/static/logo-fl.png)
 
 
 ## Acknowledgements
