@@ -9,6 +9,7 @@ from flask_babel import Babel, _, lazy_gettext
 # 2. length of the input data - (not shorter than, not longer than, message displayed if validation failed)
 # 3. validation of correct email format
 
+
 def email_exists(form, field):
     email = User.query.filter_by(user_email=field.data).first()
     if email:
@@ -16,7 +17,7 @@ def email_exists(form, field):
 
 
 class RegistrationForm(FlaskForm):
-    name = StringField(lazy_gettext('Name'),
+    name = StringField(_('Name'),
                        validators=[DataRequired(), Length(3, 15, message=_('Name should be between 3 to 15 characters'))])
     email = StringField(lazy_gettext('E-mail'), validators=[DataRequired(), Email(), email_exists])
     password = PasswordField(lazy_gettext('Password'),
