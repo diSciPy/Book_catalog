@@ -5,7 +5,7 @@
     <div class="container login-msg">
         <h4 class=>{{_('Login Here')}}</h4>
         {{ form.csrf_token }}
-
+        {{ form.hidden_tag() }}
         <hr><br>
         <div>{{wtf.quick_form(form)}}</div>
         <div class="google-btn" style = "position:relative; top:10px;" >
