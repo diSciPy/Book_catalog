@@ -8,7 +8,7 @@ from flask import send_from_directory
 
 @lp.route('/favicon.ico')
 def favicon():
-    return send_from_directory(os.path.join(app.get_project_root, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
+    return send_from_directory(os.path.join(get_project_root(), 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 
 #language switcher
