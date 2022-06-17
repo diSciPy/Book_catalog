@@ -17,7 +17,7 @@ def send_ver_email(to_emails, name, link, logo):
     message.dynamic_template_data = {
         'subject': _('Verification of email'),
         'name': name,
-        'link': f'http://127.0.0.1:5000{link}',
+        'link': f'https://foreign-literature.pp.ua{link}',
         'logo': f'{logo}'
     }
     message.template_id = 'd-a5bfd1b931aa4c61a4ed13fca9b29a94'
