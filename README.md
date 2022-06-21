@@ -8,16 +8,6 @@ Web app with book catalog:
 
 
 ## Deployment
-
-### AWS
-
-To deploy this web app on AWS - TBD
-
-```bash
-  npm run deploy
-```
-
-
 ## Run Locally
 
 Clone the project
