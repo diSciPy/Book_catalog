@@ -20,7 +20,7 @@ docker pull discipy/book-catalog:v0.0.1
 if image was 'pulled' from Dockerhub, skip step 2
 2. Build image:
 ```bash
-docker build --tag discipy/book-catalog:v0.0.1
+docker build --tag discipy/book-catalog:v0.0.1 .
 ```
 3. Run container: use --net to connect container to AWS instance network, --enf-file to declare env vars
 ```bash
