@@ -36,7 +36,7 @@
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item"> <a href="{{url_for('main.display_books')}}" padding="0">{{_('Home')}}</a></li>
                 &nbsp;
-                <li class="nav-item"> <a  href="{{url_for('authentication.register_user')}}" padding="0">{{_('Register')}}</a></li>
+                <li class="nav-item"> <a  href="{{url_for('authentication.register_user')}}" padding="0">{{_('Sign Up')}}</a></li>
                     {%if current_user.is_authenticated%}
                 &nbsp;
                 <li class="nav-item"><a href="{{url_for('authentication.log_out_user')}}"  style="color:beige" >{{_('Sign Out')}}</a></li>

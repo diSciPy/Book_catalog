@@ -137,9 +137,14 @@ def create_book(pub_id):
     form.publisher.choices = [(pub.id, pub.name[g.lang_code]) for pub in Publication.query.order_by('id').all()]
     #form.publisher.data = pub_id  # prepopulates pub_name
     if form.validate_on_submit():
-        img_en_filename, img_ua_filename = upload_image(request.files['cover_en'],
-                                                        request.files['cover_ua'],
-                                                        form.title_en.data)
+        for img in form.cover_en, form.cover_ua:
+            if request.files[img.name]:
+                cover = upload_image(request.files[img.name], form.title_en.data, img.name[-2:])
+                if img.name[-2:] == 'en':
+                    img_en_filename = cover.filename
+                else:
+                    img_ua_filename = cover.filename
+        
         book = Book(title=dict({"en": form.title_en.data, "uk_UA": form.title_ua.data}),
                     author=dict({"en": form.author_en.data, "uk_UA": form.author_ua.data}),
                     avr_rating=form.avr_rating.data,

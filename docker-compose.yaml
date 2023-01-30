@@ -1,0 +1,14 @@
+services:
+  web_volume:
+    image: "discipy/book-catalog:v0.0.2"
+    volumes:
+      - images:/home/appuser/app/static/img
+      - /home/ubuntu/Book_catalog:/home/appuser
+      - /.venv/lib/python3.9/site-packages
+    container_name: web_volume
+    env_file:
+      - .env
+    network_mode: "host"
+    restart: on-failure
+volumes:
+  images:
